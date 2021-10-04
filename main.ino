@@ -1,6 +1,6 @@
 #include <IRremoteESP8266.h>//8266的IRremote库，如果是arduinoIDE可以在“管理库”里下载(IRremoteESP8266,不是IRremote哈)
 #include <IRrecv.h>//接收库，IRremoteESP8266里的，不用下载
-#include <IRutils.h>//这个很重要，需要include(resultToTimingInfo就是这个库的)。也是IRremoteESP8266里的,不用下载
+#include <IRutils.h>//这个很重要，一定要include一下(resultToTimingInfo就是这个库的)。也是IRremoteESP8266里的,不用下载
 #include <IRsend.h>//发射库，还是IRremoteESP8266里的,不用下载
 
 //下面是一些设置，大概是一些容错率之类的参数，直接复制即可，在示例->第三方库示例->IRremoteESP8266->IRrecvDumpV2可以看到官方详细的解释，我们直接复制即可
@@ -38,7 +38,7 @@ uint16_t  rawData_Results[555]; //存放红外发射用的raw码数组，注意�
 void loop() {
   if (irrecv.decode(&results)) {          //判断是否接收到了红外的信号
     /*这里说一下
-     resultToSourceCode这个是Rutils里的，没有用到results的参数，results的参数实在没搞懂，突然发现了这个，研究了一下，他输出的内容大概是这样的（String类型的）
+     resultToSourceCode这个是IRutils里的，没有用到results的参数，results的参数实在没搞懂，突然发现了这个，研究了一下，他输出的内容大概是这样的（String类型的）
      #uint16_t rawData[67] = {8782, 4518,  544, 584,  540, 584,  538, 586,  562, 562,  566, 582,  540, 582,  542, 584,  538,...一堆数组（太长了不写了）}#
      我们用到的就是这个uint16_t数组的长度[int]:和后面的数组(注意中间有空格，需要先去空格)
      */
@@ -70,11 +70,11 @@ void loop() {
       rawData_Results[i] = rawList_result;//添加到这个uint16_t数组里
    }
    //下面是测试部分，可以自行修改哈
-   //这里说白了就是按完了就不停的发送学习的数据，如果电器有反应就学习成功了
+   //这里说白了就是按完了就不停的发送学习的数据，如果你的电器有反应就学习成功了
    //看懂这些代码之后自己改吧，比如接入个blinker什么的，各位自行发挥哈哈哈
    while(1){
-      irsend.sendRaw(rawData_Results,IRrec_value_tap,38);//这是发送Raw数组，第一个参数就是uint16_t类型的数组，第二个是数组长度，第三个是频率，红外一般就是38kHZ，直接填上38就好啦
-      delay(500);//每次发送delay个半秒
+      irsend.sendRaw(rawData_Results,IRrec_value_tap,38);//这是发送Raw数组，第一个参数就是uint16_t类型的数组，第二个是数组长度，第三个是频率，红外一般就是38kHZ，直接填上38就好
+      delay(500);//每次发送，delay个半秒
       }
 }
 }      
